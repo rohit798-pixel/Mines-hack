@@ -1,0 +1,32 @@
+const axios = require('axios');
+
+class MinesPredictor {
+    constructor(serverUrl) {
+        this.serverUrl = serverUrl;
+    }
+
+    async getGameData() {
+        try {
+            const response = await axios.get(`${this.serverUrl}/game-data`);
+            return response.data;
+        } catch (error) {
+            console.error('Error fetching game data:', error);
+            throw error;
+        }
+    }
+
+    predictNextMove(gameData) {
+        // Simple prediction logic (to be improved)
+        const lastMove = gameData.moves[gameData.moves.length - 1];
+        return lastMove === 'mine' ? 'safe' : 'mine';
+    }
+
+    async runPrediction() {
+        const gameData = await this.getGameData();
+        const prediction = this.predictNextMove(gameData);
+        console.log('Next predicted move:', prediction);
+    }
+}
+
+const minesPredictor = new MinesPredictor('https://example.com');
+minesPredictor.runPrediction();
